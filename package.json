@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/Anuj-Negi-01/mernspace-auth-service/issues"
   },
-  "homepage": "https://github.com/Anuj-Negi-01/mernspace-auth-service#readme"
+  "homepage": "https://github.com/Anuj-Negi-01/mernspace-auth-service#readme",
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "typescript": "^5.8.3"
+  }
 }
