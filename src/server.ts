@@ -1,5 +1,9 @@
 function greet(name: string) {
-  return name
+  const user = {
+    name
+  };
+  const lname = user.name;
+  return name + lname;
 }
 
 greet('Anuj');
