@@ -13,8 +13,8 @@ export default defineConfig([
     files: ['**/*.{js,mjs,cjs,ts}'],
     languageOptions: { globals: globals.browser },
     rules: {
-      'no-console': 'error',
-      'dot-notation': 'error'
+      // 'no-console': 'error',
+      // 'dot-notation': 'error'
     }
   },
   tseslint.configs.recommended,

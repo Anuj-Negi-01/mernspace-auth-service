@@ -1,9 +1,3 @@
-function greet(name: string) {
-  const user = {
-    name
-  };
-  const lname = user.name;
-  return name + lname;
-}
+import { Config } from './config';
 
-greet('Anuj');
+console.log(Config.PORT);
