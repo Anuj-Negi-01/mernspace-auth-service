@@ -5,7 +5,7 @@ import logger from './config/logger';
 const app = express();
 
 app.get('/', (req: Request, res: Response) => {
-  res.json({
+  res.status(200).json({
     message: 'Welcome to auth service'
   });
 });
