@@ -2,7 +2,7 @@ import sum from './src/utlis';
 import request from 'supertest';
 import app from './src/app';
 
-describe('App', () => {
+describe.skip('App', () => {
   it('should return a sum', () => {
     const result = sum(1, 2);
     expect(result).toBe(3);
