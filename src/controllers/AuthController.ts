@@ -14,7 +14,7 @@ export class AuthController {
     const { firstname, lastname, email, password } = req.body;
     const result = validationResult(req);
     if (!result.isEmpty()) {
-      res.status(400).json({ errors: result.array() });
+      return res.status(400).json({ errors: result.array() });
     }
     this.logger.debug('New request to register a user', {
       firstname,
