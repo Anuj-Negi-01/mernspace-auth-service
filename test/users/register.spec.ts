@@ -130,8 +130,6 @@ describe('POST /auth/register', () => {
 
       const response = await request(app).post('/auth/register').send(userData);
 
-      console.log('Response header', response.headers);
-
       interface Headers {
         ['set-cookie']: string[];
       }
