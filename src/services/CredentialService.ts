@@ -1,0 +1,7 @@
+import { compare } from 'bcrypt';
+
+export class CredentialService {
+  async comparePassword(userPassword: string, passwordHash: string) {
+    return await compare(userPassword, passwordHash);
+  }
+}
