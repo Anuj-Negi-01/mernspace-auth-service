@@ -63,7 +63,7 @@ describe('POST /auth/register', () => {
       expect(users[0].email).toBe(userData.email);
     });
 
-    it('should return and id of the created user', async () => {
+    it('should return an id of the created user', async () => {
       const userData = {
         firstname: 'Anuj',
         lastname: 'negi',

@@ -73,21 +73,17 @@ export class AuthController {
       return res.status(400).json({ errors: result.array() });
     }
     const { email, password } = req.body;
-    console.log('request body', req.body);
     this.logger.debug('New request to register a user', {
       email,
       password: '****'
     });
     try {
       const user = await this.userService.findByEmail(email);
-      console.log(user);
       if (!user) {
         const error = createHttpError(400, 'Email or password does not match.');
         next(error);
         return;
       }
-      console.log('User ka password', user.password);
-      console.log('User ka password', password);
       const passwordMatch = await this.credentailService.comparePassword(
         password,
         user.password
@@ -97,7 +93,6 @@ export class AuthController {
         next(error);
         return;
       }
-      console.log('Yahan tk aa rha h user', user);
       const payload: JwtPayload = {
         sub: String(user.id),
         role: user.role
