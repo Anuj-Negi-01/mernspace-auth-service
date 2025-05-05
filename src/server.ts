@@ -12,7 +12,7 @@ const startServer = async () => {
       logger.info('Server listening on Port', { port: PORT });
     });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     process.exit(1);
   }
 };
