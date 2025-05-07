@@ -11,7 +11,8 @@ const {
   DB_USERNAME,
   DB_PASSWORD,
   DB_NAME,
-  REFERSH_TOKEN_SECRET
+  REFERSH_TOKEN_SECRET,
+  JWKS_URI
 } = process.env;
 
 export const Config = {
@@ -22,5 +23,6 @@ export const Config = {
   DB_USERNAME,
   DB_PASSWORD,
   DB_NAME,
-  REFERSH_TOKEN_SECRET
+  REFERSH_TOKEN_SECRET,
+  JWKS_URI
 };
