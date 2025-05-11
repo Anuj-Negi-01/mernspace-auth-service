@@ -58,7 +58,6 @@ export class AuthController {
         maxAge: 1000 * 60 * 60 * 24 * 365,
         httpOnly: true
       });
-
       res.status(201).json({ id: user.id });
       return;
     } catch (error) {
@@ -135,5 +134,58 @@ export class AuthController {
   async self(req: AuthRequest, res: Response) {
     const user = await this.userService.findById(Number(req.auth.sub));
     res.status(200).json({ ...user, password: undefined });
+  }
+
+  async refresh(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const payload: JwtPayload = {
+        sub: String(req.auth.sub),
+        role: req.auth.role
+      };
+      const accessToken = this.tokenService.generateAccessToken(payload);
+      this.logger.info('New access Token has been crated', {
+        user: req.auth.sub
+      });
+      const user = await this.userService.findById(Number(req.auth.sub));
+      if (!user) {
+        const error = createHttpError(
+          400,
+          'User with the token could not found'
+        );
+        next(error);
+        return;
+      }
+      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
+      this.logger.info('new refresh token has been crated', {
+        id: newRefreshToken,
+        userId: req.auth.sub
+      });
+      await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+      this.logger.info('Token has been revoked', {
+        id: req.auth.id
+      });
+      const refreshToken = this.tokenService.generateRefreshToken({
+        ...payload,
+        id: newRefreshToken.id
+      });
+      res.cookie('accessToken', accessToken, {
+        domain: 'localhost',
+        sameSite: 'strict',
+        maxAge: 1000 * 60 * 60,
+        httpOnly: true
+      });
+      res.cookie('refreshToken', refreshToken, {
+        domain: 'localhost',
+        sameSite: 'strict',
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+        httpOnly: true
+      });
+      res.status(200).json({
+        id: user.id
+      });
+    } catch (error) {
+      next(error);
+      return;
+    }
   }
 }

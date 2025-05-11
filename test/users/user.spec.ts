@@ -84,5 +84,22 @@ describe('POST /auth/self', () => {
         .set('Cookie', [`accessToken=${accessToken}`]);
       expect(response.body).not.toHaveProperty('password');
     });
+
+    it('should return 401 staus code if accessToken is not there', async () => {
+      const userData = {
+        firstname: 'Anuj',
+        lastname: 'Negi',
+        email: 'anuj.negi@mern.space',
+        password: 'password'
+      };
+
+      const userRepository = connection.getRepository(User);
+      await userRepository.save({
+        ...userData,
+        role: Roles.CUSTOMER
+      });
+      const response = await request(app).get('/auth/self');
+      expect(response.statusCode).toBe(401);
+    });
   });
 });
