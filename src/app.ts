@@ -4,6 +4,7 @@ import { HttpError } from 'http-errors';
 import logger from './config/logger';
 import authRouter from './routes/auth';
 import cookieParser from 'cookie-parser';
+import tenantRouter from './routes/tenant';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/auth', authRouter);
+app.use('/tenants', tenantRouter);
 
 // Gloabal Error handler
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
