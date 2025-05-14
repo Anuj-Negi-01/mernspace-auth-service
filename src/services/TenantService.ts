@@ -10,4 +10,11 @@ export class TenantService {
       address: tenantData.address
     });
   }
+  async getById(tenantId: number) {
+    return await this.tenantRepository.findOne({
+      where: {
+        id: tenantId
+      }
+    });
+  }
 }

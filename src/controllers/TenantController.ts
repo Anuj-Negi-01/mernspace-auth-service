@@ -1,8 +1,9 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { TenantService } from '../services/TenantService';
 import { CreateTenantRequest } from '../types';
 import { Logger } from 'winston';
 import { validationResult } from 'express-validator';
+import createHttpError from 'http-errors';
 
 export class TenantController {
   constructor(
@@ -28,6 +29,27 @@ export class TenantController {
         id: tenant.id
       });
       return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  }
+  async getOne(req: Request, res: Response, next: NextFunction) {
+    const tenantId = req.params.id;
+    if (isNaN(Number(tenantId))) {
+      const error = createHttpError(400, 'Invaild url parameter');
+      next(error);
+      return;
+    }
+    try {
+      const tenant = await this.tenantService.getById(Number(tenantId));
+      if (!tenant) {
+        const error = createHttpError(400, 'Tenant does not exist.');
+        next(error);
+        return;
+      }
+      this.logger.info('Tenant has been fetched');
+      res.json(tenant);
     } catch (error) {
       next(error);
       return;
