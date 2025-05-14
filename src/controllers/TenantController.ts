@@ -34,6 +34,38 @@ export class TenantController {
       return;
     }
   }
+
+  async update(req: CreateTenantRequest, res: Response, next: NextFunction) {
+    const { name, address } = req.body;
+    const tenantId = req.params.id;
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).json({ errors: result.array() });
+    }
+    if (isNaN(Number(tenantId))) {
+      const error = createHttpError(400, 'Invaild url parameter');
+      next(error);
+      return;
+    }
+    this.logger.debug('Request for updating a tenant', req.body);
+    try {
+      const updateResult = await this.tenantService.update(Number(tenantId), {
+        name,
+        address
+      });
+      if (updateResult.affected === 0) {
+        const error = createHttpError(404, 'No tenant found with the given id');
+        next(error);
+        return;
+      }
+      const tenant = await this.tenantService.getById(Number(tenantId));
+      res.status(200).json(tenant);
+    } catch (error) {
+      next(error);
+      return;
+    }
+  }
+
   async getOne(req: Request, res: Response, next: NextFunction) {
     const tenantId = req.params.id;
     if (isNaN(Number(tenantId))) {

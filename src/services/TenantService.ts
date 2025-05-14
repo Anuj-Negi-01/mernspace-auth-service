@@ -10,6 +10,11 @@ export class TenantService {
       address: tenantData.address
     });
   }
+
+  async update(tenantId: number, tenantData: ITenant) {
+    return await this.tenantRepository.update(tenantId, tenantData);
+  }
+
   async getById(tenantId: number) {
     return await this.tenantRepository.findOne({
       where: {
