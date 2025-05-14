@@ -8,6 +8,7 @@ import logger from '../config/logger';
 import authenticate from '../middlewares/authenticate';
 import { canAccess } from '../middlewares/canAccess';
 import { Roles } from '../constants';
+import tenantValidator from '../validators/tenant-validator';
 
 const router = express.Router();
 const tenantRepository = AppDataSource.getRepository(Tenant);
@@ -17,6 +18,7 @@ router.post(
   '/',
   authenticate,
   canAccess([Roles.ADMIN]),
+  tenantValidator,
   (req: Request, res: Response, next: NextFunction) => {
     tenantController.crate(req, res, next);
   }

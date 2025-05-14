@@ -93,4 +93,35 @@ describe('POST /tenants', () => {
       expect(teants).toHaveLength(0);
     });
   });
+
+  describe('Fields are missing', () => {
+    it('should return 400 status code if name field is missing', async () => {
+      const tenantData = {
+        name: '',
+        address: 'Tenant address'
+      };
+      const response = await request(app)
+        .post('/tenants')
+        .set('Cookie', [`accessToken=${adminToken}`])
+        .send(tenantData);
+      expect(response.statusCode).toBe(400);
+      const tenantRepository = connection.getRepository(Tenant);
+      const teants = await tenantRepository.find();
+      expect(teants).toHaveLength(0);
+    });
+    it('should return 400 status code if address field is missing', async () => {
+      const tenantData = {
+        name: 'Tenant name',
+        address: ''
+      };
+      const response = await request(app)
+        .post('/tenants')
+        .set('Cookie', [`accessToken=${adminToken}`])
+        .send(tenantData);
+      expect(response.statusCode).toBe(400);
+      const tenantRepository = connection.getRepository(Tenant);
+      const teants = await tenantRepository.find();
+      expect(teants).toHaveLength(0);
+    });
+  });
 });
