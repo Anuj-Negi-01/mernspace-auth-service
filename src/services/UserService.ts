@@ -2,13 +2,19 @@ import { Repository } from 'typeorm';
 import { User } from '../entity/User';
 import { UserData } from '../types/index';
 import createHttpError from 'http-errors';
-import { Roles } from '../constants';
 import bcrypt from 'bcrypt';
 
 export class UserService {
   constructor(private userRepository: Repository<User>) {}
 
-  async create({ firstname, lastname, email, password }: UserData) {
+  async create({
+    firstname,
+    lastname,
+    email,
+    password,
+    role,
+    tenantId
+  }: UserData) {
     const user = await this.userRepository.findOne({ where: { email } });
     if (user) {
       const error = createHttpError(400, 'Email already exists');
@@ -23,7 +29,8 @@ export class UserService {
         lastname,
         email,
         password: hashedPassword,
-        role: Roles.CUSTOMER
+        role,
+        tenantId: tenantId ? { id: tenantId } : undefined
       });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {

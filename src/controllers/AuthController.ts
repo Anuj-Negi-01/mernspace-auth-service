@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { AuthRequest, RegisterUserRequest } from '../types/index';
+import { AuthRequest, RegisterUserRequest, UserData } from '../types/index';
 import { UserService } from '../services/UserService';
 import { Logger } from 'winston';
 import { validationResult } from 'express-validator';
@@ -7,6 +7,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import { TokenService } from '../services/TokenService';
 import createHttpError from 'http-errors';
 import { CredentialService } from '../services/CredentialService';
+import { Roles } from '../constants';
 
 export class AuthController {
   constructor(
@@ -33,7 +34,8 @@ export class AuthController {
         firstname,
         lastname,
         email,
-        password
+        password,
+        role: Roles.CUSTOMER
       });
       this.logger.info('User has been registered', { id: user.id });
       const payload: JwtPayload = {
@@ -41,7 +43,9 @@ export class AuthController {
         role: user.role
       };
       const accessToken = this.tokenService.generateAccessToken(payload);
-      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
+      const newRefreshToken = await this.tokenService.persistRefreshToken(
+        user as UserData
+      );
       const refreshToken = this.tokenService.generateRefreshToken({
         ...payload,
         id: newRefreshToken.id
