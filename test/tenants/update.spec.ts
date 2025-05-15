@@ -97,7 +97,6 @@ describe('PATCH tenants/:id', () => {
         .patch(`/tenants/${tenant.id}`)
         .set('Cookie', [`accessToken=${adminToken}`])
         .send(updatedTenantData);
-      console.log('Respone Body 😂', response.body);
       expect(response.body.name).toBe(updatedTenantData.name);
       expect(response.body.address).toBe(updatedTenantData.address);
     });

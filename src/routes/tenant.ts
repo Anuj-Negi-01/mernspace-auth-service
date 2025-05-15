@@ -36,4 +36,13 @@ router.patch(
 router.get('/:id', authenticate, canAccess([Roles.ADMIN]), (req, res, next) => {
   tenantController.getOne(req, res, next);
 });
+
+router.delete(
+  '/:id',
+  authenticate,
+  canAccess([Roles.ADMIN]),
+  (req: Request, res: Response, next: NextFunction) => {
+    tenantController.destroy(req, res, next);
+  }
+);
 export default router;

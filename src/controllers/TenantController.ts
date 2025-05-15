@@ -87,4 +87,34 @@ export class TenantController {
       return;
     }
   }
+
+  async destroy(req: Request, res: Response, next: NextFunction) {
+    const tenantId = req.params.id;
+    if (isNaN(Number(tenantId))) {
+      const error = createHttpError(400, 'Invaild url parameter');
+      next(error);
+      return;
+    }
+    try {
+      console.log('TenatId 🐳', tenantId);
+      const deleteResult = await this.tenantService.deleteById(
+        Number(tenantId)
+      );
+      if (deleteResult.affected === 0) {
+        const error = createHttpError(
+          404,
+          'Tenant for the given id does not exist.'
+        );
+        next(error);
+        return;
+      }
+      this.logger.info('Tenant has been deleted', {
+        id: Number(tenantId)
+      });
+      res.json({ id: Number(tenantId) });
+    } catch (error) {
+      next(error);
+      return;
+    }
+  }
 }
