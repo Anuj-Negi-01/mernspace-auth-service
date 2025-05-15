@@ -96,7 +96,6 @@ export class TenantController {
       return;
     }
     try {
-      console.log('TenatId 🐳', tenantId);
       const deleteResult = await this.tenantService.deleteById(
         Number(tenantId)
       );

@@ -42,11 +42,12 @@ export class UserService {
     }
   }
 
-  async findByEmail(email: string) {
+  async findByEmailAndPassword(email: string) {
     const user = await this.userRepository.findOne({
       where: {
         email
-      }
+      },
+      select: ['id', 'password']
     });
     return user;
   }
