@@ -59,4 +59,8 @@ export class UserService {
       }
     });
   }
+
+  async getAll() {
+    return await this.userRepository.find();
+  }
 }

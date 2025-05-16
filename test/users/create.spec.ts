@@ -69,5 +69,31 @@ describe('POST /users', () => {
       expect(users).toHaveLength(1);
       expect(users[0].role).toBe(Roles.MANAGER);
     });
+
+    it('should get all the users from the database', async () => {
+      const usersData = [
+        {
+          firstname: 'Anuj',
+          lastname: 'Negi',
+          email: 'anuj.negi@mern.space',
+          password: 'password',
+          role: Roles.CUSTOMER
+        },
+        {
+          firstname: 'Anuj',
+          lastname: 'Negi',
+          email: 'anujnegi@mern.space',
+          password: 'password',
+          role: Roles.CUSTOMER
+        }
+      ];
+      const userRepository = connection.getRepository(User);
+      await userRepository.save(usersData);
+      const respone = await request(app)
+        .get('/users')
+        .set('Cookie', [`accessToken=${adminToken}`])
+        .send();
+      expect(respone.body).toHaveLength(2);
+    });
   });
 });
