@@ -81,4 +81,23 @@ describe('GET /tenants/:id', () => {
       expect(response.body.address).toBe(tenantData.address);
     });
   });
+
+  describe('GET /tenants/', () => {
+    it('should get all the stored tenants', async () => {
+      const tenant = [
+        {
+          name: 'Tenant 1',
+          address: 'Tenant 1 address'
+        },
+        {
+          name: 'Tenant 2',
+          address: 'Tenant 2 address'
+        }
+      ];
+      const tenantRepository = connection.getRepository(Tenant);
+      await tenantRepository.save(tenant);
+      const respone = await request(app).get('/tenants').send();
+      expect(respone.body).toHaveLength(2);
+    });
+  });
 });

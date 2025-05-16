@@ -45,4 +45,9 @@ router.delete(
     tenantController.destroy(req, res, next);
   }
 );
+
+router.get('/', (req, res, next) => {
+  tenantController.getAll(req, res, next);
+});
+
 export default router;

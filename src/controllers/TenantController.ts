@@ -116,4 +116,15 @@ export class TenantController {
       return;
     }
   }
+
+  async getAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const tenants = await this.tenantService.getAll();
+      this.logger.info('All tenant have been fetched');
+      res.status(200).json(tenants);
+    } catch (error) {
+      next(error);
+      return;
+    }
+  }
 }
