@@ -63,4 +63,33 @@ export class UserController {
       return;
     }
   }
+
+  async update(req: CreateUserRequest, res: Response, next: NextFunction) {
+    const { firstname, lastname, role } = req.body;
+    const userId = req.params.id;
+    if (isNaN(Number(userId))) {
+      const error = createHttpError(400, 'Invalid url params');
+      next(error);
+      return;
+    }
+    this.logger.debug('Request for updating a user', req.body);
+    try {
+      const updateResult = await this.userService.update(Number(userId), {
+        firstname,
+        lastname,
+        role
+      });
+      if (updateResult.affected === 0) {
+        const error = createHttpError(404, 'Id does not exists');
+        next(error);
+      }
+      res.status(200).json({
+        id: Number(userId)
+      });
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  }
 }
