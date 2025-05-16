@@ -95,5 +95,22 @@ describe('POST /users', () => {
         .send();
       expect(respone.body).toHaveLength(2);
     });
+
+    it('should get the user from the database', async () => {
+      const userData = {
+        firstname: 'Anuj',
+        lastname: 'Negi',
+        email: 'anuj.negi@mern.space',
+        password: 'password',
+        role: Roles.CUSTOMER
+      };
+      const userRepository = connection.getRepository(User);
+      const user = await userRepository.save(userData);
+      const respone = await request(app)
+        .get(`/users/${user.id}`)
+        .set('Cookie', [`accessToken=${adminToken}`])
+        .send();
+      expect(respone.body.email).toBe(userData.email);
+    });
   });
 });
