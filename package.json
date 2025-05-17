@@ -14,7 +14,7 @@
       "start": "ts-node src/index.ts",
       "migration:generate": "typeorm-ts-node-commonjs -d src/config/data-source.ts migration:generate",
       "migration:run": "typeorm-ts-node-commonjs -d src/config/data-source.ts migration:run",
-      "migration:create": "typeorm-ts-node-commonjs -d src/config/data-source.ts migration:create"
+      "migration:create": "typeorm-ts-node-commonjs migration:create"
    },
    "repository": {
       "type": "git",

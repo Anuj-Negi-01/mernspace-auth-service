@@ -92,4 +92,30 @@ export class UserController {
       return;
     }
   }
+
+  async destroy(req: Request, res: Response, next: NextFunction) {
+    const userId = req.params.id;
+    if (isNaN(Number(userId))) {
+      const error = createHttpError(400, 'Invalid url params');
+      next(error);
+      return;
+    }
+    try {
+      const deleteInfo = await this.userService.deleteById(Number(userId));
+      if (deleteInfo.affected === 0) {
+        const error = createHttpError(404, 'Id does not exists');
+        next(error);
+      }
+      this.logger.info('User has been deleted successfully', {
+        id: Number(userId)
+      });
+      res.status(200).json({
+        id: Number(userId)
+      });
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  }
 }
